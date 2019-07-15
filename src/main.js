@@ -66,9 +66,6 @@ class Light {
     // 在 HTML 创建的容器中添加渲染器的 DOM 元素
     this.container.appendChild(this.renderer.domElement);
 
-    this.container.addEventListener('click', () => {
-      this.tweenObj(3 + ~~(Math.random() * 10))
-    })
     // 监听屏幕，缩放屏幕更新相机和渲染器的尺寸
     window.addEventListener('resize', this.handleWindowResize.bind(this), false);
   }
@@ -116,7 +113,10 @@ class Light {
       },
       texture: {
         value: this.getTexture()
-      }
+      },       
+      val: {
+          value: 1.0
+        }
     }
     // 创建 shader 粒子材料
     var points = new THREE.ShaderMaterial({
@@ -128,28 +128,33 @@ class Light {
       transparent: true
     });
 
-    // var vertices = new THREE.SphereGeometry(40, 30, 30).vertices;
-    // var positions = new Float32Array(vertices.length * 3);
-    // for (var i = 0, l = vertices.length; i < l; i++) {
-    //   let vertex = vertices[i];
-    //   vertex.toArray(positions, i * 3);
-    // }
-    // this.geometry = new THREE.BufferGeometry();
-    // this.geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
-    this.geometry = new THREE.Geometry();
-
-    for (let i = 0; i < 3000; i++) {
-
-      let vertex = new THREE.Vector3();
-      vertex.x = 400 * Math.random() - 200;
-      vertex.y = 400 * Math.random() - 200;
-      vertex.z = 400 * Math.random() - 200;
-
-      this.geometry.vertices.push(vertex);
-
+    var vertices = new THREE.BoxGeometry(100,100,100,20,20,20).vertices;
+    var positions = new Float32Array(vertices.length * 3);
+    let sizes = new Float32Array(vertices.length);
+    for (let i = 0; i < vertices.length; i++) {
+        sizes[i] = 4;
     }
+    for (var i = 0, l = vertices.length; i < l; i++) {
+      let vertex = vertices[i];
+      vertex.toArray(positions, i * 3);
+    }
+    this.geometry = new THREE.BufferGeometry();
+    this.geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
+    this.geometry.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    // this.geometry = new THREE.Geometry();
+
+    // for (let i = 0; i < 3000; i++) {
+
+    //   let vertex = new THREE.Vector3();
+    //   vertex.x = 400 * Math.random() - 200;
+    //   vertex.y = 400 * Math.random() - 200;
+    //   vertex.z = 400 * Math.random() - 200;
+
+    //   this.geometry.vertices.push(vertex);
+
+    // }
     this.particles = new THREE.Points(this.geometry, points);
-    this.tweenObj(5)
+    //this.tweenObj(5)
     this.scene.add(this.particles);
   }
 
@@ -215,8 +220,19 @@ class Light {
   update() {
     this.stats.update();
     TWEEN.update();
-    this.geometry.verticesNeedUpdate = true;
-    this.geometry.colorsNeedUpdate = true;
+    this.uniforms.val.value +=0.001
+    let time = Date.now() * 0.005;
+    if (this.particles) {
+        let bufferObj = this.particles.geometry;
+        let sizes = bufferObj.attributes.size.array;
+        let len = sizes.length;
+        for (let i = 0; i < len; i++) {
+            sizes[i] = 2 * (2.0 + Math.sin(0.02 * i + time));
+        }
+        // 需指定属性需要被更新
+        bufferObj.attributes.size.needsUpdate = true;
+        bufferObj.attributes.position.needsUpdate = true;
+    }
     this.particles.rotateY(Math.PI / 1000)
     this.particles.rotateZ(Math.PI / 1000)
     // 渲染器执行渲染
