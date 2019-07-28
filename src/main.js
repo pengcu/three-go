@@ -6,6 +6,8 @@ import TWEEN from '@tweenjs/tween.js'
 import * as vertex from './shaders/vertex.glsl'
 import * as fragment from './shaders/fragment.glsl'
 
+import overwatch from './obj/overwatch.json'
+
 class Light {
   constructor(contain = document.body) {
     this.container = contain;
@@ -106,6 +108,8 @@ class Light {
     this.scene.add(this.ambientLight);
   }
   addObjs() {
+    let objLoader = new THREE.ObjectLoader()
+    objLoader.load(overwatch, (o) => { this.scene.add(o) })
     this.uniforms = {
       color: {
         type: "c",
@@ -113,10 +117,10 @@ class Light {
       },
       texture: {
         value: this.getTexture()
-      },       
+      },
       val: {
-          value: 1.0
-        }
+        value: 1.0
+      }
     }
     // 创建 shader 粒子材料
     var points = new THREE.ShaderMaterial({
@@ -128,11 +132,11 @@ class Light {
       transparent: true
     });
 
-    var vertices = new THREE.BoxGeometry(100,100,100,20,20,20).vertices;
+    var vertices = new THREE.BoxGeometry(100, 100, 100, 20, 20, 20).vertices;
     var positions = new Float32Array(vertices.length * 3);
     let sizes = new Float32Array(vertices.length);
     for (let i = 0; i < vertices.length; i++) {
-        sizes[i] = 4;
+      sizes[i] = 4;
     }
     for (var i = 0, l = vertices.length; i < l; i++) {
       let vertex = vertices[i];
@@ -154,23 +158,7 @@ class Light {
 
     // }
     this.particles = new THREE.Points(this.geometry, points);
-    //this.tweenObj(5)
     this.scene.add(this.particles);
-  }
-
-  tweenObj(n) {
-    let box = this.getRandomGeometry(n)
-
-    this.geometry.vertices.forEach(function (e, i, arr) {
-      var length = box.vertices.length;
-      // 超出长度重复绘制
-      var o = box.vertices[i % length];
-      new TWEEN.Tween(e).to({
-        x: o.x,
-        y: o.y,
-        z: o.z
-      }, 1500).easing(TWEEN.Easing.Circular.Out).start();
-    })
   }
 
   getRandomGeometry(n) {
@@ -220,18 +208,18 @@ class Light {
   update() {
     this.stats.update();
     TWEEN.update();
-    this.uniforms.val.value +=0.001
+    this.uniforms.val.value += 0.001
     let time = Date.now() * 0.005;
     if (this.particles) {
-        let bufferObj = this.particles.geometry;
-        let sizes = bufferObj.attributes.size.array;
-        let len = sizes.length;
-        for (let i = 0; i < len; i++) {
-            sizes[i] = 2 * (2.0 + Math.sin(0.02 * i + time));
-        }
-        // 需指定属性需要被更新
-        bufferObj.attributes.size.needsUpdate = true;
-        bufferObj.attributes.position.needsUpdate = true;
+      let bufferObj = this.particles.geometry;
+      let sizes = bufferObj.attributes.size.array;
+      let len = sizes.length;
+      for (let i = 0; i < len; i++) {
+        sizes[i] = 2 * (2.0 + Math.sin(0.02 * i + time));
+      }
+      // 需指定属性需要被更新
+      bufferObj.attributes.size.needsUpdate = true;
+      bufferObj.attributes.position.needsUpdate = true;
     }
     this.particles.rotateY(Math.PI / 1000)
     this.particles.rotateZ(Math.PI / 1000)
