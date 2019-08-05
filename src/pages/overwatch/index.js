@@ -3,10 +3,8 @@ import Stats from 'stats.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import TWEEN from '@tweenjs/tween.js'
 
-import * as vertex from './shaders/vertex.glsl'
-import * as fragment from './shaders/fragment.glsl'
 
-import overwatch from './obj/overwatch.json'
+import overwatch from '../../obj/overwatch.json'
 
 class Light {
   constructor(contain = document.body) {
@@ -109,66 +107,15 @@ class Light {
   }
   addObjs() {
     let objLoader = new THREE.ObjectLoader()
-    objLoader.load(overwatch, (o) => { this.scene.add(o) })
-    this.uniforms = {
-      color: {
-        type: "c",
-        value: new THREE.Color(0x83ffff)
-      },
-      texture: {
-        value: this.getTexture()
-      },
-      val: {
-        value: 1.0
-      }
-    }
-    // 创建 shader 粒子材料
-    var points = new THREE.ShaderMaterial({
-      uniforms: this.uniforms,
-      vertexShader: vertex.default,
-      fragmentShader: fragment.default,
-      blending: THREE.AdditiveBlending,
-      depthTest: false,
-      transparent: true
-    });
-
-    var vertices = new THREE.BoxGeometry(100, 100, 100, 20, 20, 20).vertices;
-    var positions = new Float32Array(vertices.length * 3);
-    let sizes = new Float32Array(vertices.length);
-    for (let i = 0; i < vertices.length; i++) {
-      sizes[i] = 4;
-    }
-    for (var i = 0, l = vertices.length; i < l; i++) {
-      let vertex = vertices[i];
-      vertex.toArray(positions, i * 3);
-    }
-    this.geometry = new THREE.BufferGeometry();
-    this.geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3));
-    this.geometry.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
-    // this.geometry = new THREE.Geometry();
-
-    // for (let i = 0; i < 3000; i++) {
-
-    //   let vertex = new THREE.Vector3();
-    //   vertex.x = 400 * Math.random() - 200;
-    //   vertex.y = 400 * Math.random() - 200;
-    //   vertex.z = 400 * Math.random() - 200;
-
-    //   this.geometry.vertices.push(vertex);
-
-    // }
-    this.particles = new THREE.Points(this.geometry, points);
-    this.scene.add(this.particles);
-  }
-
-  getRandomGeometry(n) {
-    let tmp = [
-      new THREE.BoxGeometry(40 * n, 40 * n, 40 * n, 20, 20, 20),
-      new THREE.TorusGeometry(10 * n, 3 * n, 16, 100),
-      new THREE.TorusKnotGeometry(10 * n, 3 * n, 100, 16),
-      new THREE.SphereGeometry(10 * n, 32, 32)
-    ]
-    return tmp[n % tmp.length]
+    objLoader.load(overwatch, (o) => {
+      var cubeMaterial3 = new THREE.MeshPhongMaterial({ color: 0xccddff, envMap: this.getTexture(), refractionRatio: 0.98, reflectivity: 0.9 });
+      console.log(o)
+      o.geometry.computeVertexNormals();
+      var s = 1.5;
+      var mesh = new THREE.Mesh(o.geometry, cubeMaterial3);
+      mesh.scale.x = mesh.scale.y = mesh.scale.z = s;
+      this.scene.add(mesh);
+    })
   }
 
   getTexture(canvasSize = 64) {
@@ -208,21 +155,6 @@ class Light {
   update() {
     this.stats.update();
     TWEEN.update();
-    this.uniforms.val.value += 0.001
-    let time = Date.now() * 0.005;
-    if (this.particles) {
-      let bufferObj = this.particles.geometry;
-      let sizes = bufferObj.attributes.size.array;
-      let len = sizes.length;
-      for (let i = 0; i < len; i++) {
-        sizes[i] = 2 * (2.0 + Math.sin(0.02 * i + time));
-      }
-      // 需指定属性需要被更新
-      bufferObj.attributes.size.needsUpdate = true;
-      bufferObj.attributes.position.needsUpdate = true;
-    }
-    this.particles.rotateY(Math.PI / 1000)
-    this.particles.rotateZ(Math.PI / 1000)
     // 渲染器执行渲染
     this.renderer.render(this.scene, this.camera);
     // 循环调用
