@@ -108,13 +108,13 @@ class Light {
   addObjs() {
     let objLoader = new THREE.ObjectLoader()
     objLoader.load(overwatch, (o) => {
-      var cubeMaterial3 = new THREE.MeshPhongMaterial({ color: 0xccddff, envMap: this.getTexture(), refractionRatio: 0.98, reflectivity: 0.9 });
+      // var cubeMaterial3 = new THREE.MeshPhongMaterial({ color: 0xccddff, envMap: this.getTexture(), refractionRatio: 0.98, reflectivity: 0.9 });
       console.log(o)
-      o.geometry.computeVertexNormals();
-      var s = 1.5;
-      var mesh = new THREE.Mesh(o.geometry, cubeMaterial3);
-      mesh.scale.x = mesh.scale.y = mesh.scale.z = s;
-      this.scene.add(mesh);
+      // o.geometry.computeVertexNormals();
+      // var s = 1.5;
+      // var mesh = new THREE.Mesh(o.geometry, cubeMaterial3);
+      // mesh.scale.x = mesh.scale.y = mesh.scale.z = s;
+      this.scene.add(o);
     })
   }
 

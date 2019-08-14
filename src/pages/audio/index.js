@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 class Audio {
   constructor(contain = document.body) {
     // audio obj
-    this.numberOfBars = 60;
+    this.numberOfBars = 80;
     this.bars = [];
     // three obj
     this.container = contain;
@@ -16,6 +16,7 @@ class Audio {
     this.orbitControls = new OrbitControls(this.camera);
     this.orbitControls.autoRotate = true;
     this.setupAudioProcessing()
+    this.update();
   }
   createScene() {
     this.HEIGHT = window.innerHeight;
@@ -99,21 +100,13 @@ class Audio {
 
   createBars() {
     for (let i = 0; i < this.numberOfBars; i++) {
-
-      //create a bar
-      let barGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-
-      //create a material
+      let barGeometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
       let material = new THREE.MeshPhongMaterial({
         color: this.getRandomColor(),
         specular: 0xffffff
       });
-
-      //create the geometry and set the initial position
       this.bars[i] = new THREE.Mesh(barGeometry, material);
       this.bars[i].position.set(i - this.numberOfBars / 2, 0, 0);
-
-      //add the created bar to the scene
       this.scene.add(this.bars[i]);
     }
   }
@@ -157,7 +150,7 @@ class Audio {
       this.analyser.getByteFrequencyData(array);
 
       //render the scene and update controls
-      this.update();
+
 
       let step = Math.round(array.length / this.numberOfBars);
 
@@ -211,9 +204,9 @@ class Audio {
   update() {
     this.stats.update();
     this.renderer.render(this.scene, this.camera);
-    // requestAnimationFrame(() => {
-    //   this.update()
-    // });
+    requestAnimationFrame(() => {
+      this.update()
+    });
   }
 }
 new Audio()
