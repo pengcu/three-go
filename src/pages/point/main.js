@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import Stats from 'stats.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import TWEEN from '@tweenjs/tween.js'
 
 import * as vertex from './vertex.glsl'
 import * as fragment from './fragment.glsl'
@@ -157,7 +156,6 @@ class Light {
 
   update() {
     this.stats.update();
-    TWEEN.update();
     this.uniforms.val.value += 0.001
     let time = Date.now() * 0.005;
     if (this.particles) {

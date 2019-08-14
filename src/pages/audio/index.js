@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import Stats from 'stats.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import TWEEN from '@tweenjs/tween.js'
 
 class Audio {
   constructor(contain = document.body) {
@@ -42,7 +43,7 @@ class Audio {
     );
 
     this.camera.position.x = 0;
-    this.camera.position.z = 50;
+    this.camera.position.z = 80;
     this.camera.position.y = 0;
     this.renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -100,7 +101,8 @@ class Audio {
 
   createBars() {
     for (let i = 0; i < this.numberOfBars; i++) {
-      let barGeometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
+      let barGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+      barGeometry.translate(0, 0.25, 0)
       let material = new THREE.MeshPhongMaterial({
         color: this.getRandomColor(),
         specular: 0xffffff
@@ -158,7 +160,9 @@ class Audio {
       for (let i = 0; i < this.numberOfBars; i++) {
         let value = array[i * step] / 4;
         value = value < 1 ? 1 : value;
-        this.bars[i].scale.y = value;
+        let tween = new TWEEN.Tween(this.bars[i].scale).to({ y: value }, 100);
+        tween.start()
+        //this.bars[i].scale.y = value;
       }
     }
 
@@ -203,6 +207,7 @@ class Audio {
 
   update() {
     this.stats.update();
+    TWEEN.update();
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(() => {
       this.update()
