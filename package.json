@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel index.html --open",
-    "build": "parcel build index.html --public-url / --no-source-maps",
+    "build": "parcel build index.html --public-url /three-go --no-source-maps",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
