@@ -15,7 +15,7 @@ class Audio {
     this.initStats();
     this.addObjs();
     this.orbitControls = new OrbitControls(this.camera);
-    this.orbitControls.autoRotate = true;
+    this.orbitControls.enablePan = false;
     this.setupAudioProcessing()
     this.update();
   }
@@ -208,6 +208,7 @@ class Audio {
   update() {
     this.stats.update();
     TWEEN.update();
+    this.orbitControls.update()
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(() => {
       this.update()
