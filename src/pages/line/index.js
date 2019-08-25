@@ -6,7 +6,7 @@ import * as vertex from './vertex.glsl'
 import * as fragment from './fragment.glsl'
 
 
-class Point {
+class Line {
   constructor(contain = document.body) {
     this.container = contain;
     this.createScene();
@@ -133,4 +133,4 @@ class Point {
     });
   }
 }
-new Point()
+new Line()
