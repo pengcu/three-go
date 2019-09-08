@@ -9,13 +9,13 @@ void main() {
     vec3 c;
     
     //gold
-    // c = vec3(0.5 + 0.5 * pow(vBoost, 2.0), 0.3 + 0.7 * pow(vBoost, 4.0), 0.2 + 0.8 * pow(vBoost, 10.0));
+    c = vec3(0.5 + 0.5 * pow(vBoost, 2.0), 0.3 + 0.7 * pow(vBoost, 4.0), 0.2 + 0.8 * pow(vBoost, 10.0));
     
     //galaxy
     // c = vec3(1.5 * pow(vBoost, 3.0), 1.5 * pow(vBoost, 4.0), 1.2 * pow(vBoost, 3.0));
 
     //platium
-    c = vec3(1.5 * pow(vBoost, 2.0), 1.5 * pow(vBoost, 2.5), 1.2 * pow(vBoost, 2.6));
+    // c = vec3(1.5 * pow(vBoost, 2.0), 1.5 * pow(vBoost, 2.5), 1.2 * pow(vBoost, 2.6));
 
 	gl_FragColor = vec4(c, vLight * vLight);
 	// gl_FragColor = gl_FragColor * texture2D(texture, gl_PointCoord);

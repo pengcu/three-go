@@ -4,13 +4,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import * as vertex from './vertex.glsl'
 import * as fragment from './fragment.glsl'
-import TWEEN from '@tweenjs/tween.js'
 
 
 class Point {
   constructor(contain = document.body) {
     this.container = contain;
     this.createScene();
+    this.start = Date.now();
     this.initStats();
     this.addObjs();
     this.orbitControls = new OrbitControls(this.camera);
@@ -63,12 +63,9 @@ class Point {
   }
   addObjs() {
     this.uniforms = {
-      size: {
-        value: 10.0
-      },
-      time: {
+      time: { // float initialized to 0
         type: "f",
-        value: 0
+        value: 0.0
       }
     }
     this.points = new THREE.ShaderMaterial({
@@ -79,37 +76,11 @@ class Point {
       depthTest: false,
       transparent: true
     });
-
-    let pcount = 500000
-    this.geometry = new THREE.BufferGeometry();
-
-    let attrs = {
-      offset: new THREE.BufferAttribute(new Float32Array(pcount), 1),
-      spd: new THREE.BufferAttribute(new Float32Array(pcount), 1),
-      customColor: new THREE.BufferAttribute(new Float32Array(pcount * 3), 3),
-      position: new THREE.BufferAttribute(new Float32Array(pcount * 3), 3),
-      velocity: new THREE.BufferAttribute(new Float32Array(pcount * 3), 3)
-    };
-
-    for (var i = 0; i < pcount; i++) {
-      var i3 = i * 3;
-      attrs.spd.array[i] = Math.random() + 1.0;
-      attrs.offset.array[i] = Math.random();
-      attrs.velocity.array[i3] = (0.5 - Math.random()) * 10;
-      attrs.velocity.array[i3 + 1] = (0.5 - Math.random()) * 10;
-      attrs.velocity.array[i3 + 2] = (0.5 - Math.random()) * 10;
-      attrs.position.array[i3 + 0] = (0.5 - Math.random()) * 450;
-      attrs.position.array[i3 + 1] =
-        Math.pow(Math.random(), 8) * 45.5 * (Math.random() > 0.5 ? 1.0 : -1.0);
-      attrs.position.array[i3 + 2] = (0.5 - Math.random()) * 350;
-    }
-
-    for (let i in attrs) {
-      this.geometry.addAttribute(i, attrs[i])
-    }
-
-    this.particles = new THREE.Points(this.geometry, this.points);
-    this.scene.add(this.particles);
+    let mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(20, 20, 20),
+      this.points
+    );
+    this.scene.add(mesh);
   }
 
   initStats() {
@@ -129,9 +100,8 @@ class Point {
 
   update() {
     this.stats.update();
-    TWEEN.update();
     // 渲染器执行渲染
-    this.points.uniforms.time.value = (Date.now() / 1000) % 10000;
+    this.points.uniforms.time.value = (Date.now() - this.start) * .0025
     this.points.needsUpdate = true
     this.renderer.render(this.scene, this.camera);
     // 循环调用

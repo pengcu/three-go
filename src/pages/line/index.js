@@ -83,29 +83,6 @@ class Line {
     this.scene.add(mesh);
   }
 
-
-  getTexture(canvasSize = 64) {
-    let canvas = document.createElement('canvas');
-    canvas.width = canvasSize;
-    canvas.height = canvasSize;
-    canvas.style.background = "transparent";
-    let context = canvas.getContext('2d');
-    let gradient = context.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.width / 8, canvas.width / 2, canvas.height / 2, canvas.width / 2);
-    gradient.addColorStop(0, '#fff');
-    gradient.addColorStop(1, 'transparent');
-    context.fillStyle = gradient;
-    context.beginPath();
-    context.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, 0, Math.PI * 2, true);
-    context.fill();
-    let texture = new THREE.Texture(canvas);
-    texture.needsUpdate = true;
-    return texture;
-  }
-
-  motionPoints() {
-  }
-
-
   initStats() {
     this.stats = new Stats();
     this.stats.showPanel(0);
