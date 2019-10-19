@@ -23,4 +23,4 @@ yarn-error.log*
 /.vscode
 /.cache
 /dist
-.yarn.lock
+yarn.lock
