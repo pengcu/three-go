@@ -1,4 +1,6 @@
 # three-go
+[![Build Status](https://travis-ci.org/pengcu/three-go.svg?branch=master)](https://travis-ci.org/pengcu/three-go)
+
  A list of threejs demo 
  
  Step by step learning threejs
