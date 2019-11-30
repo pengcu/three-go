@@ -1,3 +1,5 @@
+// from https://tympanus.net/codrops/2019/11/13/high-speed-light-trails-in-three-js/
+
 import { App } from "./App";
 import * as THREE from "three";
 
