@@ -118,7 +118,6 @@ export class CarLights {
         "#include <getDistortion_vertex>",
         options.distortion.getDistortion
       );
-      console.log(shader.vertex);
     };
     let mesh = new THREE.Mesh(instanced, material);
     mesh.frustumCulled = false;

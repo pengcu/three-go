@@ -12,6 +12,7 @@
 - [line](https://pengcu.github.io/three-go/src/pages/line/index.html)
 - [cube](https://pengcu.github.io/three-go/src/pages/point/index.html)
 - [noise](https://pengcu.github.io/three-go/src/pages/noise/index.html)
+- [pixel](https://pengcu.github.io/three-go/src/pages/pixel/index.html)
 
 I am very happy if this can help you.
 

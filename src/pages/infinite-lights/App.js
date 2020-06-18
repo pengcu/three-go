@@ -30,10 +30,6 @@ export class App extends Basic {
       fogNear: { type: "f", value: fog.near },
       fogFar: { type: "f", value: fog.far }
     };
-    this.clock = new THREE.Clock();
-    this.assets = {};
-    this.disposed = false;
-
     // Create Objects
     this.road = new Road(this, options);
     this.leftCarLights = new CarLights(
@@ -59,8 +55,6 @@ export class App extends Basic {
     this.timeOffset = 0;
 
     // Binds
-    this.tick = this.tick.bind(this);
-    this.init = this.init.bind(this);
     this.setSize = this.setSize.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
@@ -75,7 +69,6 @@ export class App extends Basic {
         resolutionScale: 1
       })
     );
-    console.log(this.assets.smaa, this.camera);
     const smaaPass = new POSTPROCESSING.EffectPass(
       this.camera,
       new POSTPROCESSING.SMAAEffect(
