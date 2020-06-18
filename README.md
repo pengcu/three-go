@@ -16,3 +16,8 @@
 
 I am very happy if this can help you.
 
+## JetBrains
+
+Thanks to JetBrains for providing IDE support for this project, click to buy JetBrains IDE license to support the strongest IDE in the universe.
+
+[![JetBrains](jetbrains.jpeg)](https://www.jetbrains.com/)
