@@ -25,55 +25,7 @@
 </head>
 
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
-    <script>
-        function setup() {
-            createCanvas(700, 700);
-        }
-
-        let t = 0;
-        function draw() {
-            t += 0.001;
-            blendMode(BLEND);
-            fill(0, 20);
-            noStroke();
-            rect(0, 0, width, height);
-            blendMode(ADD);
-            let block_sz = 9;
-            for (let x = 0; x < width; x += block_sz) {
-                for (let y = 0; y < height; y += block_sz) {
-                    noStroke();
-                    let STRIBE_H = noise(x / 50, t, y / 500);
-                    let STRIBE_L = noise(100 - y / 50, -t, x / 500);
-                    let LOWFREQ = noise(x / 500, y / 500, t);
-                    let HIGHFREQ = noise(x / 100, y / 100, t);
-                    let SINCOS = sin(x / 100 + t) * cos(y / 100 - t);
-                    let staged = 150 * (((HIGHFREQ * 0.1 + LOWFREQ) * 10) % 1);
-                    // rgb
-                    fill(staged * 0.01, staged * 0.06, staged * 0.1);
-                    rect(x, y, block_sz - 3, block_sz - 3);
-                    if (((LOWFREQ * 10) % 1) < 0.1) {
-                        fill(255 * 0.1, 50 * 0.1, 80 * 0.1);
-                        rect(x, y, block_sz - 3, block_sz - 3);
-                    }
-                    if (((HIGHFREQ * 2) % 1) < 0.01) {
-                        fill(0, 0, 0);
-                        rect(x, y, block_sz - 3, block_sz - 3);
-                        fill(30 * 0.1, 20 * 0.1, 50 * 0.1);
-                        rect(x + block_sz, y, block_sz - 3, block_sz - 3);
-                    }
-                    if (((STRIBE_H * LOWFREQ) * 5 % 1) > 0.99) {
-                        fill(90 * 0.1, 120 * 0.1, 50 * 0.1);
-                        rect(x - block_sz, y, block_sz - 3, block_sz - 3);
-                    }
-                    if (((STRIBE_L * LOWFREQ) * 5 % 1) > 0.99) {
-                        fill(50 * 0.1, 50 * 0.1, 120 * 0.5);
-                        rect(x - block_sz, y, block_sz - 3, block_sz - 3);
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="./index.js"></script>
 </body>
 
 </html>

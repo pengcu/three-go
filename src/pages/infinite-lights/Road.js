@@ -70,8 +70,7 @@ export class Road {
     mesh.rotation.x = -Math.PI / 2;
     // Push it half further away
     mesh.position.z = -options.length / 2;
-    mesh.position.x +=
-      (this.options.islandWidth / 2 + options.roadWidth / 2) * side;
+    mesh.position.x += (this.options.islandWidth / 2 + options.roadWidth / 2) * side;
     this.webgl.scene.add(mesh);
 
     return mesh;
