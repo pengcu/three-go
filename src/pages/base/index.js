@@ -5,16 +5,14 @@ export class Basic {
     this.container = container;
     this.renderer = new THREE.WebGLRenderer({
       antialias: true
+      // alpha: true
     });
-    this.renderer.setSize(container.offsetWidth, container.offsetHeight, false);
+    this.renderer.setSize(container.offsetWidth, container.offsetHeight);
     this.renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
-
-    container.append(this.renderer.domElement);
-
     this.camera = new THREE.PerspectiveCamera(
       60,
       container.offsetWidth / container.offsetHeight,
-      0.1,
+      1,
       10000
     );
     this.scene = new THREE.Scene();
@@ -23,6 +21,30 @@ export class Basic {
     this.disposed = false;
     this.tick = this.tick.bind(this);
     this.init = this.init.bind(this);
+    container.append(this.renderer.domElement);
+    this.hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x000000, .9);
+
+    this.ambientLight = new THREE.AmbientLight(0xdc8874, .2);
+
+    this.shadowLight = new THREE.DirectionalLight(0xffffff, .9);
+
+    this.shadowLight.position.set(50, 50, 50);
+
+    this.shadowLight.castShadow = true;
+
+    this.shadowLight.shadow.camera.left = -400;
+    this.shadowLight.shadow.camera.right = 400;
+    this.shadowLight.shadow.camera.top = 400;
+    this.shadowLight.shadow.camera.bottom = -400;
+    this.shadowLight.shadow.camera.near = 1;
+    this.shadowLight.shadow.camera.far = 1000;
+
+    this.shadowLight.shadow.mapSize.width = 2048;
+    this.shadowLight.shadow.mapSize.height = 2048;
+
+    this.scene.add(this.hemisphereLight);
+    this.scene.add(this.shadowLight);
+    this.scene.add(this.ambientLight);
   }
   loadAssets() {
     return Promise.resolve()
