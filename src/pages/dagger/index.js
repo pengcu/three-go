@@ -47,7 +47,6 @@ class Dagger extends Basic {
 
   addObjs() {
     this.obj.traverse(child => {
-      console.log(child)
       if (child instanceof THREE.Mesh) {
         child.material = new THREE.MeshPhongMaterial({
           map: this.textures.map.val,
@@ -69,6 +68,13 @@ class Dagger extends Basic {
 
   update() {
     this.obj.rotation.y += 0.01
+    if (this.obj.rotation.y > 3) {
+      this.obj.traverse(child => {
+        if (child instanceof THREE.Mesh) {
+          child.material.emissive = new THREE.Color(0xddd12d);
+        }
+      });
+    }
   }
 
 }
