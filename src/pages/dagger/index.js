@@ -5,7 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import s from '../../obj/dagger.obj';
 
-class Voice extends Basic {
+class Dagger extends Basic {
   constructor(container, options = {}) {
     super(container);
     this.orbitControls = new OrbitControls(this.camera);
@@ -13,12 +13,11 @@ class Voice extends Basic {
     this.camera.position.z = 180;
     this.camera.position.y = 0;
     this.camera.position.x = 0;
-
-    this.addObjs()
   }
 
   loadAssets() {
     const texture = new THREE.TextureLoader();
+    const objLoader = new OBJLoader2();
     this.textures = {
       specularMap: {
         url: "https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_specular.png",
@@ -31,33 +30,45 @@ class Voice extends Basic {
       emissiveMap: {
         url: "https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_emissive.png",
         val: texture.load("https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_emissive.png")
+      },
+      alphaMap: {
+        url: "https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_gloss.png",
+        val: texture.load("https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_gloss.png")
       }
     }
-    this.textures.map.val.offset.x = 0
-    this.textures.map.val.offset.y = 0
-    return Promise.resolve()
-  }
 
-  addObjs() {
-    const objLoader = new OBJLoader2()
-    objLoader.load(s, obj => {
-      obj.traverse(child => {
-        console.log(child)
-        if (child instanceof THREE.Mesh) {
-          child.material = new THREE.MeshPhongMaterial({
-            map: this.textures.map.val,
-            specularMap: this.textures.specularMap.val,
-            emissiveMap: this.textures.emissiveMap.val
-          })
-          child.scale.set(2, 2, 2)
-        }
-      });
-      this.scene.add(obj)
+    return new Promise((resolve, reject) => {
+      objLoader.load(s, obj => {
+        this.obj = obj
+        resolve()
+      })
     })
   }
 
-  update() {
+  addObjs() {
+    this.obj.traverse(child => {
+      console.log(child)
+      if (child instanceof THREE.Mesh) {
+        child.material = new THREE.MeshPhongMaterial({
+          map: this.textures.map.val,
+          specularMap: this.textures.specularMap.val,
+          emissiveMap: this.textures.emissiveMap.val,
+          alphaMap: this.textures.alphaMap.val
+        })
+        child.material.specular = new THREE.Color(0x00ffff);
+        child.scale.set(2, 2, 2)
+      }
+    });
+    this.scene.add(this.obj)
+  }
 
+  init() {
+    this.addObjs()
+    this.tick()
+  }
+
+  update() {
+    this.obj.rotation.y += 0.01
   }
 
 }
@@ -71,5 +82,5 @@ const f = `
 `
 
 
-let x = new Voice(document.body)
+let x = new Dagger(document.body)
 x.loadAssets().then(x.init)
