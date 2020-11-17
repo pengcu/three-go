@@ -5,6 +5,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import s from '../../obj/dagger.obj';
 
+
+
+/**
+ * 1. https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_mask.png
+ * mask 效果
+ * 2. map color
+ */
 class Dagger extends Basic {
   constructor(container, options = {}) {
     super(container);
