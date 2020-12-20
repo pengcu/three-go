@@ -8,7 +8,7 @@ import s from '../../obj/dagger.obj';
 
 
 /**
- * 1. https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_mask.png
+ * 1. 
  * mask 效果
  * 2. map color
  */
@@ -41,6 +41,10 @@ class Dagger extends Basic {
       alphaMap: {
         url: "https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_gloss.png",
         val: texture.load("https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_gloss.png")
+      },
+      aoMap: {
+        url: "https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_mask.png",
+        val: texture.load("https://models.babylonjs.com/Demos/weaponsDemo/textures/moltenDagger_mask.png")
       }
     }
 
@@ -59,9 +63,9 @@ class Dagger extends Basic {
           map: this.textures.map.val,
           specularMap: this.textures.specularMap.val,
           emissiveMap: this.textures.emissiveMap.val,
-          alphaMap: this.textures.alphaMap.val
+          alphaMap: this.textures.alphaMap.val,
+          aoMap: this.textures.aoMap.val
         })
-        child.material.specular = new THREE.Color(0x00ffff);
         child.scale.set(2, 2, 2)
       }
     });
@@ -78,6 +82,15 @@ class Dagger extends Basic {
     if (this.obj.rotation.y > 3) {
       this.obj.traverse(child => {
         if (child instanceof THREE.Mesh) {
+          child.material = new THREE.MeshPhongMaterial({
+            map: this.textures.map.val,
+            specularMap: this.textures.specularMap.val,
+            emissiveMap: this.textures.emissiveMap.val,
+            alphaMap: this.textures.alphaMap.val,
+            aoMap: this.textures.aoMap.val
+          })
+
+          child.material.specular = new THREE.Color(0x00ffff);
           child.material.emissive = new THREE.Color(0xddd12d);
         }
       });
