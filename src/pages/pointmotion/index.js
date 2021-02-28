@@ -7,9 +7,17 @@ class Voice extends Basic {
     super(container);
     this.orbitControls = new OrbitControls(this.camera);
     this.orbitControls.autoRotate = true;
-    this.camera.position.z = 180;
-    this.camera.position.y = 0;
-    this.camera.position.x = 0;
+    this.orbitControls.maxDistance = 1000;
+    this.orbitControls.minPolarAngle = 0.3;
+    this.orbitControls.maxPolarAngle = Math.PI / 2 - 0.1;
+    this.orbitControls.enablePan = true;
+    const bgColor = new THREE.Color("#000000");
+    this.scene.fog = new THREE.FogExp2(bgColor, 0.001);
+
+    const tmpColor = this.floor.mesh.material.color = new THREE.Color("#000000");;
+    tmpColor.lerp(bgColor, 0.05);
+    this.scene.fog.color.copy(tmpColor);
+    this.renderer.setClearColor(tmpColor.getHex());
 
     this.addObjs()
   }
@@ -56,6 +64,7 @@ class Voice extends Basic {
     }
 
     this.particles = new THREE.Points(this.geometry, this.points);
+
     this.scene.add(this.particles);
   }
 

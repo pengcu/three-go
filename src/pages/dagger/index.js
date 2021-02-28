@@ -17,9 +17,17 @@ class Dagger extends Basic {
     super(container);
     this.orbitControls = new OrbitControls(this.camera);
     this.orbitControls.autoRotate = true;
-    this.camera.position.z = 180;
-    this.camera.position.y = 0;
-    this.camera.position.x = 0;
+    this.orbitControls.maxDistance = 1000;
+    this.orbitControls.minPolarAngle = 0.3;
+    this.orbitControls.maxPolarAngle = Math.PI / 2 - 0.1;
+    this.orbitControls.enablePan = true;
+    const bgColor = new THREE.Color("#ffffff");
+    this.scene.fog = new THREE.FogExp2(bgColor, 0.001);
+
+    const tmpColor = this.floor.mesh.material.color;
+    tmpColor.lerp(bgColor, 0.05);
+    this.scene.fog.color.copy(tmpColor);
+    this.renderer.setClearColor(tmpColor.getHex());
   }
 
   loadAssets() {
@@ -66,9 +74,10 @@ class Dagger extends Basic {
           alphaMap: this.textures.alphaMap.val,
           aoMap: this.textures.aoMap.val
         })
-        child.scale.set(2, 2, 2)
+        child.scale.set(4, 4, 4)
       }
     });
+    this.obj.position.y = 200
     this.scene.add(this.obj)
   }
 
