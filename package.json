@@ -19,6 +19,6 @@
     "parcel-plugin-json-url-loader": "^0.1.2",
     "postprocessing": "^6.8.9",
     "stats.js": "^0.17.0",
-    "three": "^0.105.2"
+    "three": "^0.125.0"
   }
 }
