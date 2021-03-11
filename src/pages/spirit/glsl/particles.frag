@@ -1,4 +1,4 @@
-varying float vLight;
+varying vec3 vLight;
 void main(){
-    gl_FragColor = vec4(vLight*vLight,1.0,0.0,1.0);
+    gl_FragColor = vec4(vLight.xyz,1.0);
 }

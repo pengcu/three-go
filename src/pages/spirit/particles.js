@@ -12,8 +12,8 @@ export class Particles {
     this.webgl = webgl;
     this.color1 = new THREE.Color("#ffffff");
     this.color2 = new THREE.Color("#e34532");
-    this.WIDTH = 64;
-    this.HIGHT = 64;
+    this.WIDTH = 256;
+    this.HIGHT = 256;
     this.AMOUNT = this.WIDTH * this.HIGHT;
     this.container = new THREE.Object3D();
   }
@@ -23,18 +23,15 @@ export class Particles {
 
   createParticleMesh() {
     var position = new Float32Array(this.AMOUNT * 3);
-    var size = new Float32Array(this.AMOUNT * 1);
     var i3;
     for (var i = 0; i < this.AMOUNT; i++) {
-      size[i] = rand(0.1, 0.8);
       i3 = i * 3;
-      position[i3 + 0] = (i % this.WIDTH) / this.WIDTH * rand(1, 100);
-      position[i3 + 1] = ~~(i / this.WIDTH) / this.HIGHT * rand(1, 100);
-      position[i3 + 2] = ~~(i / this.WIDTH) / this.HIGHT * rand(1, 100);
+      position[i3 + 0] = (i % this.WIDTH) / this.WIDTH;
+      position[i3 + 1] = ~~(i / this.WIDTH) / this.HIGHT;
+      position[i3 + 2] = ~~(i / this.WIDTH) / this.HIGHT;
     }
     var geometry = new THREE.BufferGeometry();
     geometry.addAttribute('position', new THREE.BufferAttribute(position, 3));
-    geometry.addAttribute('size', new THREE.BufferAttribute(position, 3));
 
 
     var material = new THREE.ShaderMaterial({
