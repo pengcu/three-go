@@ -34,7 +34,6 @@ class Spirit extends Basic {
 
   update(delta) {
     this.xx.update(delta)
-    // this.tick()
   }
 }
 

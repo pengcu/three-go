@@ -84,6 +84,6 @@ export class Particles {
 
 
   update(delta) {
-    this.mesh.material.uniforms.vtime.value = delta;
+    this.mesh.material.uniforms.vtime.value = (Date.now() / 1000) % 10000;
   }
 }

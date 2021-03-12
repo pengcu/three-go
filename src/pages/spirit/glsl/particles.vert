@@ -33,7 +33,8 @@ void main() {
     pos.x += noise(pos)*600.0;
     pos.y += noise(pos)*200.0;
     pos.z += noise(pos)*230.0;
-    //pos.z *= abs(sin(vtime))*100.0;
+    pos.y += (noise(pos) - 0.5) * 5.0;
+    pos.y += sin(vtime)*10.0;
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
     gl_PointSize = noise(pos)  * 2.3;
     gl_Position = projectionMatrix * mvPosition;
