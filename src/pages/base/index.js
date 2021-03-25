@@ -49,7 +49,7 @@ export class Basic {
 
   onResize() { }
 
-  update(delta) { }
+  update(ela) { }
 
   render() {
     this.renderer.render(this.scene, this.camera);
@@ -63,9 +63,9 @@ export class Basic {
       this.camera.updateProjectionMatrix();
       this.onResize();
     }
-    const delta = this.clock.getDelta();
-    this.render(delta);
-    this.update(delta);
+    const ela = this.clock.getElapsedTime();
+    this.render();
+    this.update(ela);
     requestAnimationFrame(this.tick);
   }
 }
