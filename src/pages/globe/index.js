@@ -21,6 +21,7 @@ class Globe extends Basic {
         this.renderer.setClearColor(tmpColor.getHex());
     }
 
+
     addObjs() {
         let a = new G();
         a.init()

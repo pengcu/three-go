@@ -9,8 +9,29 @@ export class G {
         this.createG()
     }
 
-    createG() {
-        const texture = new THREE.TextureLoader().load("https://malikfaizanhaider.github.io/Interactive-globe/images/earth_black.png");
+    loadTexture() {
+        return new Promise(reslove => {
+            new THREE.TextureLoader().load("https://github.githubassets.com/images/modules/site/home/globe/map.png", reslove);
+        })
+    }
+
+    getImageData(t) {
+        const e = document.createElement("canvas").getContext("2d");
+        return e.canvas.width = t.width,
+            e.canvas.height = t.height,
+            e.drawImage(t, 0, 0, t.width, t.height),
+            e.getImageData(0, 0, t.width, t.height)
+    }
+
+    test(geo) {
+
+    }
+
+    async createG() {
+        const x = await this.loadTexture();
+        const i = this.getImageData(x.image);
+        const texture = new THREE.Texture(i);
+        console.log(i)
         const geometry = new THREE.IcosahedronGeometry(150, 4);
         const material = new THREE.MeshPhongMaterial({ color: '#1826ef', map: texture });
         const sphere = new THREE.Mesh(geometry, material);
