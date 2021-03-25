@@ -11,9 +11,34 @@ export class G {
 
     createG() {
         const texture = new THREE.TextureLoader().load("https://malikfaizanhaider.github.io/Interactive-globe/images/earth_black.png");
-        const geometry = new THREE.IcosahedronGeometry(50, 4);
-        const material = new THREE.MeshPhongMaterial({ color: 0xffff00, map: texture });
+        const geometry = new THREE.IcosahedronGeometry(150, 4);
+        const material = new THREE.MeshPhongMaterial({ color: '#1826ef', map: texture });
         const sphere = new THREE.Mesh(geometry, material);
+        const customMaterial = new THREE.ShaderMaterial(
+            {
+                uniforms: {},
+                vertexShader: `
+                varying vec3 vNormal;
+                void main() 
+                {
+                    vNormal = normalize( normalMatrix * normal );
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+                }`,
+                fragmentShader: `
+                varying vec3 vNormal;
+                void main() 
+                {
+                    float intensity = pow( 0.3 - dot( vNormal, vec3( 0.0, 0.0, 1.0 ) ), 4.0 ); 
+                    gl_FragColor = vec4( 1.0, 1.0, 1.0, 1.0 ) * intensity;
+                }`,
+                side: THREE.BackSide,
+                blending: THREE.AdditiveBlending,
+                transparent: true
+            });
+
+        var ballGeometry = new THREE.IcosahedronGeometry(200, 4);
+        var ball = new THREE.Mesh(ballGeometry, customMaterial);
+        this.container.add(ball);
         this.container.add(sphere)
         this.container.position.y = 100
 
